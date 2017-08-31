@@ -30,6 +30,21 @@ var albumMarconi = {
     ]
 };
 
+// Another Example Album
+var albumFrampton = {
+    title:' I\'m In You',
+    artist: 'Peter Frampton',
+    label: 'UMG Recordings',
+    year: '1977',
+    albumArtUrl: 'assets/images/album_covers/21.jpg',
+    songs: [
+        { title: 'Road Runner', duration: '1:01' },
+        { title: 'Signed, Sealed, Delivered', duration: '5:01' },
+        { title: 'Tried to Love', duration: '3:21'},
+
+    ]
+};
+
 // generates the song row content
     var createSongRow = function(songNumber, songName, songLength) {
          var template =
@@ -43,15 +58,15 @@ var albumMarconi = {
          return template;
      };
 
-     var setCurrentAlbum = function(album) {
-// select all of the HTML elements required to display on the album page:
-//  title, artist, release info, image, and song list.
-    var albumTitle = document.getElementsByClassName('album-view-title')[0];
-    var albumArtist = document.getElementsByClassName('album-view-artist')[0];
-    var albumReleaseInfo = document.getElementsByClassName('album-view-release-info')[0];
-    var albumImage = document.getElementsByClassName('album-cover-art')[0];
-    var albumSongList = document.getElementsByClassName('album-view-song-list')[0];
+     // select all of the HTML elements required to display on the album page:
+     //  title, artist, release info, image, and song list.
+     var albumTitle = document.getElementsByClassName('album-view-title')[0];
+     var albumArtist = document.getElementsByClassName('album-view-artist')[0];
+     var albumReleaseInfo = document.getElementsByClassName('album-view-release-info')[0];
+     var albumImage = document.getElementsByClassName('album-cover-art')[0];
+     var albumSongList = document.getElementsByClassName('album-view-song-list')[0];
 
+     var setCurrentAlbum = function(album) {
     // The firstChild property identifies the first child node of an element,
     // and nodeValue returns or sets the value of a node.
     albumTitle.firstChild.nodeValue = album.title;
@@ -69,8 +84,33 @@ var albumMarconi = {
     }
 };
 
+
+
+// var chooseNextCover= function() {
+//     setCurrentAlbum(albumCovers[currentCoverIndex]);
+//     currentCoverIndex = currentCoverIndex + 1;
+//     if (currentCoverIndex > 2) {
+//         currentCoverIndex = 0;
+//     }
+//
+// };
+
+
 // Call setCurrentAlbum when window loads
 window.onload = function() {
-    console.log("before setCurrentAlbum")
+
     setCurrentAlbum(albumPicasso);
+
+    var albumCovers = [];
+    albumCovers[0] = albumPicasso;
+    albumCovers[1] = albumMarconi;
+    albumCovers[2] = albumFrampton;
+    var currentCoverIndex=1;
+    albumImage.addEventListener ("click", function() {
+        setCurrentAlbum(albumCovers[currentCoverIndex]);
+        currentCoverIndex = currentCoverIndex + 1;
+        if (currentCoverIndex > 2) {
+            currentCoverIndex = 0;
+        }
+    });
 };
