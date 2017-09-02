@@ -69,15 +69,27 @@ var albumMarconi = {
     }
 };
 
-var findParentByClassName = function(elem, findClassName) {
-    if (elem) {
-        var currentParent = elem.parentElement;
-        while (currentParent.className !== findClassName && currentParent.className !== null) {
+var findParentByClassName = function(element, classNameToFind){
+    if(element){
+        var currentParent = element.parentElement;
+        if (currentParent == null) {
+            console.log("No parent found.");
+            return currentParent;
+        }
+
+        while(currentParent.className !== classNameToFind){
             currentParent = currentParent.parentElement;
+            if (currentParent == null){
+                break;
+            }
+        }
+
+        if (currentParent == null) {
+            console.log("No parent found with that class name.")
         }
         return currentParent;
     }
-};
+}
 
 var getSongItem = function(elem) {
     if (elem){
