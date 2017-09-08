@@ -176,7 +176,6 @@ var previousSong = function () {
 
     $prevSongNumberCell.html(pauseButtonTemplate);
     $lastSongNumberCell.html(lastSongNumber);
-
 };
 
 var togglePlayFromPlayerBar = function() {
