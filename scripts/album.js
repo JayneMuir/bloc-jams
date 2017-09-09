@@ -36,20 +36,37 @@ var getSongNumberCell = function(number){
     return $('.song-item-number[data-song-number="' + number + '"]');
 };
 
+var setTotalTimeInPlayerBar = function(totalTime) {
+    var $totalTime = $('.seek-control .total-time ');
+    $totalTime.text(totalTime);
+};
+
 var updatePlayerBarSong = function() {
     $('.currently-playing .song-name').text(currentSongFromAlbum.title);
     $('.currently-playing .artist-name').text(currentAlbum.artist);
     $('.currently-playing .artist-song-mobile').text(currentSongFromAlbum.title + " - " + currentAlbum.artist);
     $('.main-controls .play-pause').html(playerBarPauseButton);
+
+    setTotalTimeInPlayerBar(filterTimeCode(currentSongFromAlbum.duration));
+
 };
+
+var filterTimeCode = function(timeInSeconds){
+    var minutes = Math.floor(parseFloat(timeInSeconds) / 60);
+    var seconds = Math.floor(parseFloat(timeInSeconds) - minutes * 60);
+    var strMinutesSeconds = minutes + ':' + seconds;
+    return strMinutesSeconds;
+};
+
 
 // generates the song row content
 var createSongRow = function(songNumber, songName, songLength) {
+
     var template =
     '<tr class="album-view-song-item">'
     +'  <td class="song-item-number" data-song-number="' + songNumber + '">' + songNumber + '</td>'
     + '  <td class="song-item-title">' + songName + '</td>'
-    + '  <td class="song-item-duration">' + songLength + '</td>'
+    + '  <td class="song-item-duration">' + filterTimeCode(songLength) + '</td>'
     + '</tr>'
     ;
 
@@ -198,6 +215,27 @@ var previousSong = function () {
     $prevSongNumberCell.html(pauseButtonTemplate);
     $lastSongNumberCell.html(lastSongNumber);
 
+};
+
+var setCurrentTimeInPlayerBar = function (currentTime) {
+    var $currentTime = $('.seek-control .current-time');
+    $currentTime.text(filterTimeCode(currentTime));
+};
+
+var updateSeekBarWhileSongPlays = function() {
+    if (currentSoundFile) {
+        // bind() the timeupdate event to currentSoundFile
+        currentSoundFile.bind('timeupdate', function(event) {
+            //Buzz's  getTime() method to get the current time of the song and
+            // the getDuration() method for getting the total length of the song.
+            // Both values return time in seconds.
+            var seekBarFillRatio = this.getTime() / this.getDuration();
+            var $seekBar = $('.seek-control .seek-bar');
+
+            setCurrentTimeInPlayerBar(this.getTime());
+            updateSeekPercentage($seekBar, seekBarFillRatio);
+        });
+    }
 };
 
 var updateSeekPercentage = function($seekBar, seekBarFillRatio) {
